@@ -1,21 +1,29 @@
 let video;
 let handpose;
 let previsoes = [];
+let logo;
 
 let estadoJogo = 0;
 
-//0 é o menu inicial, 2 é o jogo e o 1 é o tutorial
+//0 é o menu inicial, 1 é o tutorial e o 2 é o jogo
 
-function SecurityPolicyViolationEvent(){
-    createCanvas(640, 480);
-    video = createCapture(VIDEO);
+function preload(){
+    logo = loadImage("media/logo.png"); 
+}
+
+function setup(){
+    createCanvas(960, 680);
+    video = createCapture({
+        video: true,
+        audio: false
+    });
     video.size(width, height);
 
-    handpose = ml5.handpose(video, modelCarregado);
+    handpose = ml5.handPose(video, modelCarregado);
 
-    handpose.on("predict", results => {
+    /*handpose.on("predict", results => {
         previsoes = results;
-    });
+    });*/
 
     video.hide();
 
@@ -27,24 +35,36 @@ function modelCarregado(){
 }
 
 function draw(){
-    image(video, 0, 0, width, height);
 
+    // MENU
     if(estadoJogo === 0){
+        background(75, 0, 130); //roxo
         desenharMenu();
-    }else if(estadoJogo === 1){
-            desenharTutorial();
-        } else if(estadoJogo === 2){
-            desenharJogo();
-        }
+    }
 
-    desenharPontos();
+    // TUTORIAL
+    else if(estadoJogo === 1){
+        background(75, 0, 130); //roxo
+        desenharTutorial();
+    }
+
+    // JOGO
+    else if(estadoJogo === 2){
+
+        push();
+        translate(width,0);
+        scale(-1,1);
+        image(video,0,0,width,height);
+        pop();
+
+        desenharJogo();
+        desenharPontos();
+    }
 }
 
 function desenharMenu(){
-    fill(0, 0, 0, 150);
-    rect(0, 0, width, height);
 
-    fill(255);
+    fill(255); // branco
     textSize(50);
     text("HAND DANCE", width / 2, height / 3);
     textSize(20);
@@ -54,40 +74,38 @@ function desenharMenu(){
 }
 
 function desenharTutorial(){
-fill(0, 0, 0, 200);
-  rect(0, 0, width, height);
+
+    fill(255); //branco
+    textSize(40);
+    text("TUTORIAL", width / 2, 80);
   
-  fill(255);
-  textSize(40);
-  text("TUTORIAL", width / 2, 80);
-  
-  // Regras baseadas no teu protótipo 2
-  textSize(20);
-  text("Faz os gestos para a direção correta:", width / 2, 160);
-  text("👆 Indicador = CIMA", width / 2, 220);
-  text("👈 Polegar = ESQUERDA", width / 2, 260);
-  text("✊ Punho = BAIXO", width / 2, 300);
-  text("✋ Mão de lado = DIREITA", width / 2, 340);
-  textSize(18);
-  fill(200, 200, 200);
-  text("Pressiona 'V' para Voltar", width / 2, height - 50);
+    // Regras baseadas no teu protótipo 2
+    textSize(20);
+    text("Faz os gestos para a direção correta:", width / 2, 160);
+    text(" Indicadores = CIMA", width / 2, 220);
+    text(" Polegar direito = ESQUERDA", width / 2, 260);
+    text(" Punhos = BAIXO", width / 2, 300);
+    text(" Polegar esquerdo = DIREITA", width / 2, 340);
+    textSize(18);
+    //fill(200, 200, 200);
+    text("Pressiona 'V' para Voltar", width / 2, height - 50);
 }
 
 function desenharJogo() {
-  desenharPontos();
+    desenharPontos();
   
-  fill(255);
-  textSize(24);
-  textAlign(LEFT, TOP); // Alinha o texto à esquerda para a pontuação
-  text("Score: 0", 20, 20);
-  textAlign(CENTER, CENTER); 
+    fill(255); //branco
+    textSize(24);
+    textAlign(LEFT, TOP); // Alinha o texto à esquerda para a pontuação
+    text("Score: 0", 20, 20);
+    textAlign(CENTER, CENTER); 
   
-  // Aviso de que esta fase ainda está em construção
-  textSize(30);
-  text("A JOGAR!", width / 2, height / 2);
+    // Aviso de que esta fase ainda está em construção
+    textSize(30);
+    text("A JOGAR!", width / 2, height / 2);
   
-  textSize(16);
-  text("Pressiona 'V' para Voltar ao Menu", width / 2, height - 30);
+    textSize(16);
+    text("Pressiona 'V' para Voltar ao Menu", width / 2, height - 30);
 }
 
 function desenharPontos(){
@@ -108,13 +126,13 @@ function desenharPontos(){
 
 function keyPressed(){
     if(estadoJogo === 0){
-        if(keyCode === 0){
+        if(keyCode === ENTER){
             estadoJogo = 2;
         } else if (key === 't' || key === 'T'){
             estadoJogo = 1;
         }
     } else if (estadoJogo === 1 || estadoJogo === 2){
-        if(key === 'v' || key === ' V'){
+        if(key === 'v' || key === 'V'){
                 estadoJogo = 0;
         }
     }
