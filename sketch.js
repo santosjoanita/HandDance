@@ -149,52 +149,50 @@ function desenharMenu() {
 }
 
 //  TUTORIAL
+
 function desenharTutorial() {
     desenharFundoAnimado();
-    let xV = width - 340, yV = 20;
-    desenharVideo(xV, yV, 310, 230);
-    verificarGesto();
 
-    usarFonteJogo();
-    fill(255, 220, 0); textSize(22); textAlign(LEFT);
-    text("Gesto: " + gestoAtual, xV + 8, yV + 252);
-    textAlign(CENTER);
-
+    // Título do Tutorial 
     usarFonteBotoes();
-    fill(255); textSize(38);
-    text("TUTORIAL", 260, 52);
+    fill(255); textSize(42); textAlign(CENTER, TOP);
+    text("TUTORIAL", 290, 30);
+    textAlign(CENTER, CENTER);
 
     let linhas = [
-        { img: imgSetaCima,
-          t1: "CIMA  →  mão aberta para cima",
-          t2: "       (dedos todos esticados)" },
-        { img: imgSetaBaixo,
-          t1: "BAIXO  →  punho fechado",
-          t2: "" },
-        { img: imgSetaEsq,
-          t1: "ESQUERDA  →  indicador aponta à esquerda",
-          t2: "           (outros dedos dobrados)" },
-        { img: imgSetaDir,
-          t1: "DIREITA  →  indicador aponta à direita",
-          t2: "          (outros dedos dobrados)" },
+        { img: imgSetaCima,   t1: "CIMA  →  mão aberta para cima",           t2: "       (dedos todos esticados)" },
+        { img: imgSetaBaixo,  t1: "BAIXO  →  punho fechado",                 t2: "" },
+        { img: imgSetaEsq,    t1: "ESQUERDA  →  indicador aponta à esquerda",t2: "           (outros dedos dobrados)" },
+        { img: imgSetaDir,    t1: "DIREITA  →  indicador aponta à direita",  t2: "          (outros dedos dobrados)" },
     ];
 
     imageMode(CENTER); textAlign(LEFT);
     for (let i = 0; i < linhas.length; i++) {
-        let yy = 118 + i * 72;
-        if (linhas[i].img) image(linhas[i].img, 55, yy, 42, 42);
+        let yy = 145 + i * 80; 
+        if (linhas[i].img) image(linhas[i].img, 60, yy, 48, 48); 
+        
         usarFonteBotoes();
-        fill(255); textSize(16);
-        text(linhas[i].t1, 88, yy - (linhas[i].t2 ? 8 : 0));
-        if (linhas[i].t2) { fill(200); textSize(13); text(linhas[i].t2, 88, yy + 14); }
+        fill(255); textSize(17);
+        text(linhas[i].t1, 100, yy - (linhas[i].t2 ? 8 : 0));
+        if (linhas[i].t2) { 
+            fill(200); textSize(14); 
+            text(linhas[i].t2, 100, yy + 16); 
+        }
     }
-    imageMode(CORNER); textAlign(CENTER);
+    imageMode(CORNER);
+
+    let xV = width - 360, yV = 30;
+    desenharVideoComMoldura(xV, yV, 320, 240);
+    verificarGesto();
 
     usarFonteJogo();
-    fill(255, 220, 100); textSize(14);
-    text("Mantém o gesto quando a seta chegar à linha amarela!", width/2-80, height-78);
+    fill(255, 220, 0); textSize(24); textAlign(CENTER);
+    text("Gesto: " + gestoAtual, xV + 160, yV + 275);
 
-    desenharBotao("VOLTAR", width/2-80, height-42, 200, 48);
+    fill(255, 220, 100); textSize(16);
+    text("Mantém o gesto quando a seta chegar à linha amarela!", width/2, height - 90);
+
+    desenharBotao("VOLTAR", width/2, height - 45, 200, 48);
 }
 
 //  JOGO
@@ -454,7 +452,7 @@ function mousePressed() {
         if (botaoClicado(width/2, height/2+55,  260, 56)) iniciarJogo();
         if (botaoClicado(width/2, height/2+130, 260, 56)) irParaTutorial();
     }
-    if (estadoJogo === 1) if (botaoClicado(width/2-80, height-42, 200, 48)) irParaMenu();
+    if (estadoJogo === 1) if (botaoClicado(width/2, height-45, 200, 48)) irParaMenu();
     if (estadoJogo === 2) if (botaoClicado(width-72,   30,        120, 42)) irParaMenu();
     if (estadoJogo === 3) {
         if (botaoClicado(width/2, height/2+130, 300, 56)) iniciarJogo();
@@ -521,4 +519,17 @@ class Seta {
             noStroke();
         }
     }
+}
+function desenharVideoComMoldura(x, y, larg, alt) {
+    let padding = 7;
+    let r = 14;
+    noStroke(); 
+    fill(0, 0, 0, 60);
+    rect(x - padding + 3, y - padding + 4, larg + padding * 2, alt + padding * 2, r);
+    stroke(255, 255, 255, 120);
+    strokeWeight(2);
+    fill(140, 40, 220); 
+    rect(x - padding, y - padding, larg + padding * 2, alt + padding * 2, r);
+    noStroke();
+    desenharVideo(x, y, larg, alt);
 }
