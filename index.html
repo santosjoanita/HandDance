@@ -4,32 +4,105 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hand Dance</title>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  
-  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
   <script src="sketch.js"></script>
-  
+
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
-      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      background-image: linear-gradient(to bottom, #e187f3, #4a2657);
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1a0030 0%, #5a1080 50%, #1a0030 100%);
+      overflow: hidden;
+      font-family: sans-serif;
     }
+
+    /* ── Setas estáticas decorativas ── */
+    .bg-arrows {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .arrow {
+      position: absolute;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
     canvas {
+      position: relative;
+      z-index: 1;
       display: block;
-      border: 4px solid #fff;
-      border-radius: 10px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 14px;
+      box-shadow: 0 0 60px rgba(180,60,255,0.5);
     }
   </style>
 </head>
 <body>
-  <script src="sketch.js"></script>
-  <img src ="media/logo.png" alt="Logo" style="position: absolute; top: 20px; left: 10px; width: 200px; height: 100px;">
+
+  <div class="bg-arrows" id="bgArrows"></div>
+
+  <script>
+    const container = document.getElementById('bgArrows');
+    const arrowImgs = [
+      'media/cima.png',
+      'media/baixo.png',
+      'media/esquerda.png',
+      'media/direita.png'
+    ];
+
+    // Posições fixas espalhadas pelo ecrã — estáticas, sem animação
+    const configs = [
+      { left:  2, top:  5, size: 55,  rot: -15, op: 0.12 },
+      { left:  8, top: 60, size: 90,  rot:  10, op: 0.08 },
+      { left: 14, top: 30, size: 40,  rot: -20, op: 0.15 },
+      { left: 20, top: 80, size: 70,  rot:   5, op: 0.10 },
+      { left: 28, top: 12, size:110,  rot:  18, op: 0.07 },
+      { left: 35, top: 50, size: 45,  rot: -8,  op: 0.13 },
+      { left: 42, top: 88, size: 80,  rot:  22, op: 0.09 },
+      { left: 50, top: 20, size: 60,  rot: -12, op: 0.11 },
+      { left: 57, top: 70, size:100,  rot:   3, op: 0.07 },
+      { left: 63, top:  8, size: 50,  rot: -25, op: 0.14 },
+      { left: 70, top: 42, size: 75,  rot:  14, op: 0.09 },
+      { left: 76, top: 90, size: 45,  rot:  -6, op: 0.12 },
+      { left: 82, top: 22, size:120,  rot:  20, op: 0.06 },
+      { left: 88, top: 60, size: 55,  rot: -18, op: 0.13 },
+      { left: 93, top: 38, size: 85,  rot:   8, op: 0.08 },
+      { left: 97, top: 75, size: 50,  rot: -10, op: 0.11 },
+      { left:  5, top: 45, size: 65,  rot:  25, op: 0.09 },
+      { left: 25, top: 65, size: 40,  rot: -20, op: 0.14 },
+      { left: 45, top: 35, size: 95,  rot:  12, op: 0.07 },
+      { left: 65, top: 55, size: 48,  rot: -15, op: 0.12 },
+      { left: 85, top: 10, size: 70,  rot:   6, op: 0.10 },
+      { left: 15, top: 92, size: 58,  rot: -22, op: 0.08 },
+      { left: 55, top:  3, size: 82,  rot:  17, op: 0.09 },
+      { left: 75, top: 82, size: 44,  rot: -9,  op: 0.13 },
+    ];
+
+    configs.forEach((c, idx) => {
+      const el  = document.createElement('div');
+      el.classList.add('arrow');
+      const img = arrowImgs[idx % arrowImgs.length];
+      el.style.cssText = `
+        width:  ${c.size}px;
+        height: ${c.size}px;
+        left:   ${c.left}%;
+        top:    ${c.top}%;
+        background-image: url('${img}');
+        opacity: ${c.op};
+        transform: rotate(${c.rot}deg);
+      `;
+      container.appendChild(el);
+    });
+  </script>
 </body>
 </html>
