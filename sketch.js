@@ -12,7 +12,7 @@ let gestoAtual = "NONE";
 let estadoJogo = 0; // 0=menu 1=tutorial 2=jogo 3=gameover
 
 let feedback = "", feedbackTimer = 0, feedbackCor;
-let velocidadeBase = 2.5;
+let velocidadeBase = 1.5;
 let nivelAtual     = 1;
 
 const LINHA      = 0.88;
@@ -216,7 +216,7 @@ function desenharJogo() {
 
     // Gerar setas
     nivelAtual = 1 + floor(max(pontuacao, 0) / 400);
-    let intervalo = max(30, 80 - nivelAtual * 6);
+    let intervalo = max(60, 150 - nivelAtual * 6);
     if (frameCount % intervalo === 0) {
         let tipos = ["CIMA", "BAIXO", "ESQUERDA", "DIREITA"];
         if (repetCount >= 2) tipos = tipos.filter(t => t !== ultimoTipo);
