@@ -1,6 +1,3 @@
-// =============================================
-//  HAND DANCE — sketch.js  (ml5 v0.12.2)
-// =============================================
 
 let video, handpose;
 let previsoes = [];
@@ -29,9 +26,9 @@ let acertosSeguid = 0;  // sequência de acertos consecutivos
 let ultimoTipo    = "";
 let repetCount    = 0;
 
-// =============================================================
-//  PARTÍCULAS DE FUNDO (menu e tutorial)
-// =============================================================
+
+// menu e tutorial
+
 let particulas = [];
 let ondaOffset = 0;
 
@@ -87,7 +84,6 @@ function desenharFundoAnimado() {
     }
     noStroke();
 
-    // Partículas flutuantes
     for (let p of particulas) { p.update(); p.draw(); }
 
     // Brilhos estáticos aleatórios
@@ -101,7 +97,6 @@ function desenharFundoAnimado() {
     }
 }
 
-// =============================================================
 function preload() {
     logo         = loadImage("media/logo.png");
     imgSetaCima  = loadImage("media/cima.png");
@@ -127,7 +122,6 @@ function setup() {
     iniciarParticulas();
 }
 
-// =============================================================
 function draw() {
     background(75, 0, 130);
     if      (estadoJogo === 0) desenharMenu();
@@ -136,9 +130,8 @@ function draw() {
     else if (estadoJogo === 3) desenharGameOver();
 }
 
-// =============================================================
 //  MENU
-// =============================================================
+
 function desenharMenu() {
     desenharFundoAnimado();
     imageMode(CENTER);
@@ -155,9 +148,7 @@ function desenharMenu() {
     desenharBotao("TUTORIAL", width/2, height/2 + 130, 260, 56);
 }
 
-// =============================================================
 //  TUTORIAL
-// =============================================================
 function desenharTutorial() {
     desenharFundoAnimado();
     let xV = width - 340, yV = 20;
@@ -206,9 +197,7 @@ function desenharTutorial() {
     desenharBotao("VOLTAR", width/2-80, height-42, 200, 48);
 }
 
-// =============================================================
 //  JOGO
-// =============================================================
 function desenharJogo() {
     desenharVideo(0, 0, width, height);
     verificarGesto();
@@ -309,9 +298,8 @@ function desenharCoracoes() {
     textAlign(CENTER);
 }
 
-// =============================================================
 //  FIM DE JOGO
-// =============================================================
+
 function terminarJogo() { estadoJogo = 3; }
 
 function desenharGameOver() {
@@ -336,9 +324,7 @@ function desenharGameOver() {
     desenharBotao("MENU",          width/2, height/2 + 202, 300, 56);
 }
 
-// =============================================================
 //  BOTÃO
-// =============================================================
 function desenharBotao(label, x, y, w, h) {
     let over = mouseX>x-w/2 && mouseX<x+w/2 && mouseY>y-h/2 && mouseY<y+h/2;
 
@@ -357,9 +343,8 @@ function desenharBotao(label, x, y, w, h) {
     text(label, x, y);
 }
 
-// =============================================================
 //  VÍDEO + PONTOS
-// =============================================================
+
 function desenharVideo(x, y, larg, alt) {
     push();
     translate(x + larg, y);
@@ -390,9 +375,7 @@ function mostrarFeedback(msg, cor) {
     feedback = msg; feedbackCor = cor; feedbackTimer = 55;
 }
 
-// =============================================================
-//  HELPERS FONTE
-// =============================================================
+//  FONTE
 function usarFonteBotoes() {
     textFont('Arial Black, Impact, sans-serif');
     textStyle(BOLD);
@@ -402,9 +385,7 @@ function usarFonteJogo() {
     textStyle(NORMAL);
 }
 
-// =============================================================
 //  MENSAGENS DE STREAK
-// =============================================================
 function mensagemAcerto(streak) {
     if (streak >= 10) return "LENDÁRIO!!";
     if (streak >= 8)  return "IMPARÁVEL!";
@@ -419,12 +400,10 @@ function corAcerto(streak) {
     if (streak >= 6)  return color(255, 200, 0);   // dourado
     if (streak >= 4)  return color(100, 255, 150);  // verde claro
     if (streak >= 2)  return color(80,  220, 255);  // azul claro
-    return color(0, 255, 120);                      // verde normal
+    return color(0, 255, 120);                      
 }
 
-// =============================================================
 //  GESTOS
-// =============================================================
 function getP(pts, i) {
     let p = pts[i];
     return Array.isArray(p) ? { x:p[0], y:p[1] } : { x:p.x, y:p.y };
@@ -459,9 +438,7 @@ function verificarGesto() {
     gestoAtual = "NONE";
 }
 
-// =============================================================
 //  TECLADO
-// =============================================================
 function keyPressed() {
     if (estadoJogo === 0) {
         if (keyCode === ENTER)          iniciarJogo();
@@ -471,9 +448,7 @@ function keyPressed() {
     }
 }
 
-// =============================================================
 //  RATO
-// =============================================================
 function mousePressed() {
     if (estadoJogo === 0) {
         if (botaoClicado(width/2, height/2+55,  260, 56)) iniciarJogo();
@@ -491,9 +466,7 @@ function botaoClicado(cx, cy, w, h) {
     return mouseX>cx-w/2 && mouseX<cx+w/2 && mouseY>cy-h/2 && mouseY<cy+h/2;
 }
 
-// =============================================================
 //  NAVEGAÇÃO
-// =============================================================
 function iniciarJogo() {
     setas=[]; pontuacao=0; nivelAtual=1;
     missesSeguid=0; acertosSeguid=0; ultimoTipo=""; repetCount=0;
@@ -503,9 +476,7 @@ function iniciarJogo() {
 function irParaTutorial() { estadoJogo=1; }
 function irParaMenu()     { estadoJogo=0; }
 
-// =============================================================
 //  CLASSE SETA
-// =============================================================
 class Seta {
     constructor(tipo, vel) {
         this.tipo        = tipo;
