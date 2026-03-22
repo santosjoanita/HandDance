@@ -1,0 +1,44 @@
+# 🖐️ Hand Dance - Exercício Interativo de Treino Cognitivo
+
+Bem-vindo(a) ao repositório do **Hand Dance**, um projeto desenvolvido para a Unidade Curricular de Tecnologias Interativas do Instituto Politécnico de Viana do Castelo (IPVC - ESTG).
+
+## 🧠 Sobre o Projeto
+O **Hand Dance** é um exercício interativo focado no **Treino Cognitivo**. O objetivo principal é estimular a memória de curto prazo, a atenção visual e a coordenação motora dos utilizadores. Através da câmara do computador (webcam), o utilizador deve reproduzir gestos com a mão para corresponder às sequências aleatórias que surgem no ecrã.
+
+## ✨ Funcionalidades
+- **Deteção em Tempo Real:** Utiliza a biblioteca HandPose do ml5 para rastrear os movimentos da mão do utilizador via webcam.
+- **Dificuldade Progressiva:** A velocidade e a frequência das sequências aumentam consoante a pontuação do jogador.
+- **Feedback Visual:** Sistema de *streaks* (acertos consecutivos) com mensagens e cores dinâmicas, além de um sistema de "vidas" (corações).
+- **Interface Intuitiva:** Máquina de estados fluída com Menu Inicial, Tutorial detalhado, Ecrã de Jogo e Game Over.
+
+## 🛠️ Tecnologias Utilizadas
+- **HTML5 & CSS3** - Estruturação e estilização base.
+- **JavaScript** - Lógica principal do jogo.
+- **[p5.js](https://p5js.org/)** - Biblioteca para manipulação do *canvas*, desenho da interface e da captura de vídeo.
+- **[ml5.js (HandPose)](https://ml5js.org/)** - Modelo de *Machine Learning* responsável pelo rastreamento dos 21 pontos de articulação da mão.
+
+## 🚀 Como Executar o Projeto
+Devido às restrições de segurança dos navegadores modernos ao aceder à webcam e a ficheiros locais, é recomendado correr este projeto através de um servidor local.
+
+**Passo a passo:**
+1. Faz o clone deste repositório: `git clone https://github.com/santosjoanita/HandDance.git`
+2. Abre a pasta do projeto num editor de código (ex: Visual Studio Code).
+3. Instala a extensão **Live Server** (se usares o VS Code).
+4. Clica com o botão direito no ficheiro `index.html` e seleciona **"Open with Live Server"**.
+5. Permite o acesso à câmara no teu navegador e diverte-te!
+
+## 🤚 Como Jogar (Gestos)
+O jogo deteta os seguintes gestos com a mão:
+* **CIMA:** Mão aberta (todos os dedos esticados).
+* **BAIXO:** Punho fechado.
+* **ESQUERDA:** Dedo indicador a apontar para a esquerda (restantes dobrados).
+* **DIREITA:** Dedo indicador a apontar para a direita (restantes dobrados).
+
+*Nota: Mantém o gesto correspondente quando a seta cruzar a linha amarela no fundo do ecrã!*
+
+## 👥 Autoras
+* **Joana Santos** (Nº 31365)
+* **Maria do Carmo Leão** (Nº 30382)
+
+**Docente:** Pedro Faria  
+**Data:** Março 2026
