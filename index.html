@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hand Dance</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.sound.min.js"></script>
-<script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
-    <script src="sketch.js"></script>
-
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -61,7 +56,6 @@
       'media/direita.png'
     ];
 
-    // Posições fixas espalhadas pelo ecrã — estáticas, sem animação
     const configs = [
       { left:  2, top:  5, size: 55,  rot: -15, op: 0.12 },
       { left:  8, top: 60, size: 90,  rot:  10, op: 0.08 },
@@ -105,5 +99,11 @@
       container.appendChild(el);
     });
   </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+  <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
+  
+  <script src="sketch.js"></script>
 </body>
 </html>
