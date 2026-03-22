@@ -824,7 +824,7 @@ function verificarGesto() {
     if (!pts || pts.length < 21) { gestoAtual="NONE"; return; }
 
 
-
+ // Obter os keypoints de cada dedo e da palma
     let palma   = getP(pts, 9);
 
     let pulso   = getP(pts, 0);
@@ -836,19 +836,19 @@ function verificarGesto() {
     let medio   = getP(pts, 12);
 
     let anelar  = getP(pts, 16);
-
+    
     let mindin  = getP(pts, 20);
 
 
 
     let pontas = [polegar, indic, medio, anelar, mindin];
-
+// Verifica quantos dedos estão esticados para cima (y menor que a palma)
     let cima   = pontas.filter(p => p.y < palma.y - 15).length;
-
+// Verifica quantos dedos estão fechados/apontar para baixo
     let baixo  = pontas.filter(p => p.y > palma.y + 15).length;
 
 
-
+// Exige que 2 outros dedos estejam dobrados e o indicador deslocado no eixo X
     let outrosDobrados = [medio, anelar, mindin]
 
         .filter(p => Math.abs(p.y - palma.y) < 40).length;
