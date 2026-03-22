@@ -7,7 +7,7 @@ let logo;
 
 let imgSetaCima, imgSetaBaixo, imgSetaEsq, imgSetaDir;
 
-
+let somAcerto, somErro;
 
 
 
@@ -207,8 +207,9 @@ function preload() {
 
     imgSetaDir   = loadImage("media/direita.png");
 
+    somAcerto = loadSound("media/correct.mp3");
 
-
+    somErro = loadSound("media/wrong.mp3");
 }
 
 
@@ -463,6 +464,8 @@ function desenharJogo() {
 
             if (gestoAtual === setas[i].tipo) {
 
+                if (somAcerto) somAcerto.play();
+
                 pontuacao += 100;
 
                 acertosSeguid++;
@@ -472,6 +475,8 @@ function desenharJogo() {
                 setas.splice(i, 1);
 
             } else {
+
+                if (somErro) somErro.play();
 
                 setas[i].errou = true;
 
@@ -826,17 +831,11 @@ function verificarGesto() {
 
  // Obter os keypoints de cada dedo e da palma
     let palma   = getP(pts, 9);
-
     let pulso   = getP(pts, 0);
-
     let polegar = getP(pts, 4);
-
     let indic   = getP(pts, 8);
-
     let medio   = getP(pts, 12);
-
     let anelar  = getP(pts, 16);
-    
     let mindin  = getP(pts, 20);
 
 
@@ -848,7 +847,7 @@ function verificarGesto() {
     let baixo  = pontas.filter(p => p.y > palma.y + 15).length;
 
 
-// Exige que 2 outros dedos estejam dobrados e o indicador deslocado no eixo X
+
     let outrosDobrados = [medio, anelar, mindin]
 
         .filter(p => Math.abs(p.y - palma.y) < 40).length;
