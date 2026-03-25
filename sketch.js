@@ -53,6 +53,13 @@ let repetCount    = 0;
 
 
 
+// variáveis para o "carregar nos botões" com o handpose
+// Variáveis para o ponteiro gestual
+let pontoIndicadorScaled = null; 
+let tempoHover = 0; 
+const TEMPO_CLIQUE_FRAMES = 60; // 60 frames = 1 segundo a pisar o botão
+let botaoSendoHoverado = null;
+
 
 
 // menu e tutorial
@@ -250,6 +257,8 @@ function draw() {
 
     background(75, 0, 130);
 
+    atualizarPonteiroMao();
+
     if      (estadoJogo === 0) desenharMenu();
 
     else if (estadoJogo === 1) desenharTutorial();
@@ -257,6 +266,8 @@ function draw() {
     else if (estadoJogo === 2) desenharJogo();
 
     else if (estadoJogo === 3) desenharGameOver();
+
+    desenharFeedbackPonteiro();
 
 }
 
@@ -290,9 +301,8 @@ function desenharMenu() {
 
 
 
-    desenharBotao("INICIAR",  width/2, height/2 + 55,  260, 56);
-
-    desenharBotao("TUTORIAL", width/2, height/2 + 130, 260, 56);
+   gerirBotaoGestual("INICIAR",  width/2, height/2 + 55,  260, 56, iniciarJogo);
+   gerirBotaoGestual("TUTORIAL", width/2, height/2 + 130, 260, 56, irParaTutorial);
 
 }
 
@@ -386,7 +396,7 @@ function desenharTutorial() {
 
 
 
-    desenharBotao("VOLTAR", width/2, height - 45, 200, 48);
+    gerirBotaoGestual("VOLTAR", width/2, height - 45, 200, 48, irParaMenu);
 
 }
 
@@ -558,7 +568,7 @@ function desenharJogo() {
 
 
 
-    desenharBotao("MENU", width-72, 30, 120, 42);
+    gerirBotaoGestual("MENU", width-72, 30, 120, 42, irParaMenu);
 
 }
 
@@ -642,50 +652,10 @@ function desenharGameOver() {
 
 
 
-    desenharBotao("JOGAR OUTRA VEZ", width/2, height/2 + 130, 300, 56);
-
-    desenharBotao("MENU",          width/2, height/2 + 202, 300, 56);
-
-}
-
-
-
-//  BOTÃO
-
-function desenharBotao(label, x, y, w, h) {
-
-    let over = mouseX>x-w/2 && mouseX<x+w/2 && mouseY>y-h/2 && mouseY<y+h/2;
-
-
-
-    // Sombra
-
-    noStroke(); fill(0,0,0,60);
-
-    rect(x-w/2+3, y-h/2+4, w, h, 14);
-
-
-
-    fill(over ? color(200,90,255) : color(140,40,220));
-
-    stroke(over ? color(255,255,255,220) : color(255,255,255,120));
-
-    strokeWeight(2);
-
-    rect(x-w/2, y-h/2, w, h, 14);
-
-    noStroke();
-
-
-
-    usarFonteBotoes();
-
-    fill(255); textSize(21);
-
-    text(label, x, y);
+    gerirBotaoGestual("JOGAR OUTRA VEZ", width/2, height/2 + 130, 300, 56, iniciarJogo);
+    gerirBotaoGestual("MENU",          width/2, height/2 + 202, 300, 56, irParaMenu);
 
 }
-
 
 
 //  VÍDEO + PONTOS
@@ -1064,4 +1034,95 @@ function desenharVideoComMoldura(x, y, larg, alt) {
 
     desenharVideo(x, y, larg, alt);
 
+}
+
+//funções novas após as sugestões
+
+function atualizarPonteiroMao() {
+    pontoIndicadorScaled = null; 
+    
+    if (previsoes && previsoes.length > 0) {
+        let pts = previsoes.landmarks;
+        
+        if (pts && pts.length >= 21) { 
+            let indic = getP(pts, 8); 
+
+            // Matemática simples para esticar a posição do vídeo para o ecrã
+            let scaledX = (1 - (indic.x / 640)) * width; // O "1 -" serve para fazer o efeito espelho
+            let scaledY = (indic.y / 480) * height;
+            
+            pontoIndicadorScaled = { x: scaledX, y: scaledY };
+        }
+    }
+}
+function gerirBotaoGestual(label, x, y, w, h, acaoAAtivar) {
+    let mouseOver = mouseX > x - w / 2 && mouseX < x + w / 2 && mouseY > y - h / 2 && mouseY < y + h / 2;
+    let maoOver = false;
+
+    if (pontoIndicadorScaled) {
+        let px = pontoIndicadorScaled.x;
+        let py = pontoIndicadorScaled.y;
+        maoOver = px > x - w / 2 && px < x + w / 2 && py > y - h / 2 && py < y + h / 2;
+    }
+
+    let over = mouseOver || maoOver;
+
+    if (maoOver) {
+        if (botaoSendoHoverado === label) {
+            tempoHover++; 
+            if (tempoHover >= TEMPO_CLIQUE_FRAMES) {
+                acaoAAtivar();
+                tempoHover = 0; 
+                botaoSendoHoverado = null;
+            }
+        } else {
+            botaoSendoHoverado = label;
+            tempoHover = 0;
+        }
+    } else if (botaoSendoHoverado === label) {
+        botaoSendoHoverado = null;
+        tempoHover = 0;
+    }
+
+    // Desenhar a caixa do botão
+    noStroke(); fill(0, 0, 0, 60);
+    rect(x - w / 2 + 3, y - h / 2 + 4, w, h, 14);
+    fill(over ? color(200, 90, 255) : color(140, 40, 220));
+    stroke(over ? color(255, 255, 255, 220) : color(255, 255, 255, 120));
+    strokeWeight(2);
+    rect(x - w / 2, y - h / 2, w, h, 14);
+    noStroke();
+
+    // Barra amarela a encher
+    if (maoOver && botaoSendoHoverado === label) {
+        let progresso = map(tempoHover, 0, TEMPO_CLIQUE_FRAMES, 0, w - 10);
+        fill(255, 220, 0, 150);
+        noStroke();
+        rect(x - w / 2 + 5, y + h / 2 - 12, progresso, 7, 10);
+    }
+
+    usarFonteBotoes();
+    fill(255); textSize(21);
+    text(label, x, y);
+}
+
+function desenharFeedbackPonteiro() {
+    if (pontoIndicadorScaled) {
+        let px = pontoIndicadorScaled.x;
+        let py = pontoIndicadorScaled.y;
+
+        push();
+        translate(px, py);
+        
+        noFill(); stroke(0, 60); strokeWeight(3); ellipse(2, 2, 25, 25); 
+        stroke(255, 240); ellipse(0, 0, 25, 25); 
+        fill(255, 220, 0); noStroke(); ellipse(0, 0, 6, 6); // Centro amarelo
+
+        if (botaoSendoHoverado) {
+            noFill(); stroke(255, 220, 0); strokeWeight(4);
+            let anguloFinal = map(tempoHover, 0, TEMPO_CLIQUE_FRAMES, -HALF_PI, TWO_PI - HALF_PI);
+            arc(0, 0, 25, 25, -HALF_PI, anguloFinal);
+        }
+        pop();
+    }
 }
